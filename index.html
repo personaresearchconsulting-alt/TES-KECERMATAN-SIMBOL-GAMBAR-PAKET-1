@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PORTAL SIMULASI - Persona Research & Consulting</title>
+    <style>
+        :root {
+            --navy: #0b2340;
+            --gold: #d4a017;
+            --white: #ffffff;
+            --gray: #f1f5f9;
+        }
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 500px;
+            background: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-top: 6px solid var(--navy);
+            text-align: center;
+        }
+        .brand {
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .subtitle {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .menu-item {
+            background: var(--navy);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+            display: block;
+        }
+        .menu-item:hover {
+            background: var(--gold);
+            transform: translateY(-2px);
+        }
+        #login-section {
+            display: block;
+        }
+        #menu-section {
+            display: none;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 16px;
+        }
+        .btn-login {
+            background: var(--gold);
+            color: var(--navy);
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .footer {
+            margin-top: 30px;
+            font-size: 10px;
+            color: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="brand">PERSONA RESEARCH & CONSULTING</div>
+    <div class="subtitle">Digital Assessment Center</div>
+
+    <div id="login-section">
+        <input type="password" id="pass" placeholder="Masukkan Password Akses">
+        <button class="btn-login" onclick="checkAccess()">MASUK SISTEM</button>
+    </div>
+
+    <div id="menu-section">
+        <div class="menu-list">
+            <a href="mono_17_fix.html" class="menu-item">SIMULASI 1: GAMBAR MIX</a>
+            <a href="mono_15.html" class="menu-item">SIMULASI 2: SATWA & SILUET</a>
+            <a href="mono_16.html" class="menu-item">SIMULASI 3: INSTRUMEN CAMPURAN</a>
+        </div>
+        <p style="font-size: 11px; color: #ef4444; margin-top: 20px;" id="expiry-note"></p>
+    </div>
+
+    <div class="footer">
+        © 2026 Persona Research & Consulting. All Rights Reserved.<br>
+        Multi-Device Protection Active (Limit: 50 Devices)
+    </div>
+</div>
+
+<script>
+    // Konfigurasi Keamanan
+    const CONFIG = {
+        password: "persona02",
+        maxDevices: 50,
+        expiryDays: 7,
+        startDate: new Date("2026-04-29T10:30:00") // Dimulai saat ini
+    };
+
+    function checkAccess() {
+        const input = document.getElementById('pass').value;
+        const now = new Date();
+        
+        // 1. Cek Kadaluarsa (7 Hari)
+        const diffTime = Math.abs(now - CONFIG.startDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        
+        if (diffDays > CONFIG.expiryDays) {
+            alert("Maaf, masa berlaku link simulasi ini telah berakhir.");
+            return;
+        }
+
+        // 2. Cek Password
+        if (input !== CONFIG.password) {
+            alert("Password Salah!");
+            return;
+        }
+
+        // 3. Cek Device Limit (Fingerprint Sederhana via LocalStorage)
+        let deviceID = localStorage.getItem('prc_device_id');
+        let deviceCount = parseInt(localStorage.getItem('prc_total_devices') || "0");
+
+        if (!deviceID) {
+            if (deviceCount >= CONFIG.maxDevices) {
+                alert("Batas maksimal device (50) telah tercapai.");
+                return;
+            }
+            // Daftarkan device baru
+            deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9);
+            localStorage.setItem('prc_device_id', deviceID);
+            localStorage.setItem('prc_total_devices', deviceCount + 1);
+        }
+
+        // Jika lolos semua, tampilkan menu
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('menu-section').style.display = 'block';
+        
+        // Tampilkan info kadaluarsa
+        const expDate = new Date(CONFIG.startDate);
+        expDate.setDate(expDate.getDate() + CONFIG.expiryDays);
+        document.getElementById('expiry-note').innerText = "Akses berakhir pada: " + expDate.toLocaleDateString('id-ID');
+    }
+
+    // Anti Copy & Right Click
+    document.addEventListener('contextmenu', event => event.preventDefault());
+    document.onkeydown = function(e) {
+        if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'U'.charCodeAt(0)))) {
+            return false;
+        }
+    }
+</script>
+
+</body>
+</html>
