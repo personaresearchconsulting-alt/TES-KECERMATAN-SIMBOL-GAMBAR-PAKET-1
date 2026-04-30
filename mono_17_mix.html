@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
-    <title>TES KECERMATAN EKSPRESI - Persona Research & Consulting</title>
+    <title>TES KECERMATAN - Persona Research & Consulting</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -12,9 +12,10 @@
         body { -webkit-user-select: none; user-select: none; margin:0; font-family:'Inter',sans-serif; background:#e2e8f0; display:flex; justify-content:center; min-height:100vh; color:#071130; }
         .wrap{width:100%; max-width:980px; background:#fff; border-top:6px solid var(--navy); border-radius:12px; box-shadow:0 10px 25px rgba(0,0,0,0.1); margin:20px; padding:30px; display: flex; flex-direction: column; min-height: 92vh;}
         
+        /* Filter Hitam Putih Mutlak agar Emoji Tidak Berwarna */
         .symbol-black { 
-            filter: url(#sharpBlack) brightness(1.2);
-            -webkit-filter: url(#sharpBlack) brightness(1.2);
+            filter: grayscale(100%) brightness(0);
+            -webkit-filter: grayscale(100%) brightness(0);
             display: inline-block;
             line-height: 1;
             vertical-align: middle;
@@ -60,15 +61,9 @@
 </head>
 <body>
 
-<svg style="position: absolute; width: 0; height: 0;">
-  <filter id="sharpBlack">
-    <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 5 -1" />
-  </filter>
-</svg>
-
 <div class="wrap" id="captureArea">
     <header>
-        <h1 style="font-size: 18px; color: var(--navy); margin:0;">TES KECERMATAN EKSPRESI</h1>
+        <h1 style="font-size: 18px; color: var(--navy); margin:0;">TES KECERMATAN GAMBAR HILANG</h1>
         <p style="font-size: 11px; color: #64748b; margin: 3px 0 0 0;">Persona Research & Consulting</p>
     </header>
 
@@ -78,7 +73,7 @@
     </div>
 
     <div id="prepOverlay">
-        <div style="font-size:18px; margin-bottom:10px; color: #64748b;">FOKUS PADA DETAIL KARAKTER...</div>
+        <div style="font-size:18px; margin-bottom:10px; color: #64748b;">SIAPKAN KONSENTRASI ANDA...</div>
         <div id="countdownText">3</div>
     </div>
 
@@ -117,18 +112,11 @@
 </div>
 
 <script>
-        const MASTER_BANK = [
-    ["🏹", "🛡️", "⚔️", "🔱", "💎"], // Set 1: Peralatan Ksatria & Permata
-    ["🌋", "🌊", "🌪️", "☀️", "❄️"], // Set 2: Fenomena Alam (Kontras Bentuk)
-    ["🚲", "🚀", "⛵", "🚜", "🚁"], // Set 3: Transportasi (Siluet Berbeda)
-    ["🍄", "🌵", "🌻", "🌳", "🍁"], // Set 4: Flora (Detail Kelopak/Batang)
-    ["⚽", "🏀", "🎾", "🎱", "🏐"], // Set 5: Olahraga (Variasi Tekstur Bulat)
-    ["🎹", "🎸", "🎻", "🎷", "🥁"], // Set 6: Instrumen Musik
-    ["🍔", "🍕", "🍣", "🍦", "🍩"], // Set 7: Kuliner (Bentuk Geometris Makanan)
-    ["💡", "🔋", "🔌", "🔦", "⚙️"], // Set 8: Komponen Teknik
-    ["🦜", "🐠", "🦋", "🦎", "🐞"], // Set 9: Makhluk Hidup Warna-Warni
-    ["🏠", "🗼", "🎡", "🎢", "⛲"]  // Set 10: Ikon Rekreasi & Bangunan
-];
+    // Bank 100% Emoji (Anti-Kalimat)
+    const MASTER_POOL = ["🐘","🐒","🦢","🦀","🐈","🦒","🐎","🦉","🦋","🐕","🦓","🐄","🦅","🐜","🐇","🐪","🐑","🐧","🦐","🐖","🐆","🐅","Duck","🦆","🐝","🐀","🦍","🦌","🦇","🐞","🐍","🐃","🐦","🦗","🐢","🦛","RAM","🦜","🦂","🦎","🦁","🐐","🐓","🐙","🐨","🐻","🦃","🐠","🐼"];
+    
+    // Filter hanya mengambil karakter emoji asli (panjang <= 2)
+    const CLEAN_POOL = MASTER_POOL.filter(item => item.length <= 2);
 
     let currentIdx = 0, timerLeft = 60, interval = null, results = [], pName = "", activeChars = [];
 
@@ -154,7 +142,14 @@
     }
 
     function startCol() {
-        activeChars = [...MASTER_BANK[currentIdx]].sort(() => Math.random() - 0.5);
+        // Ambil 5 Simbol Unik untuk Kolom ini (Anti-Duplikat)
+        let pool = [...CLEAN_POOL];
+        activeChars = [];
+        while(activeChars.length < 5) {
+            let randIdx = Math.floor(Math.random() * pool.length);
+            activeChars.push(pool.splice(randIdx, 1)[0]);
+        }
+
         timerLeft = 60;
         if(!results[currentIdx]) results.push({t:0, b:0, s:0});
         document.getElementById('topRow').style.display = 'flex';
@@ -185,9 +180,12 @@
     function nextSoal() {
         const missingIdx = Math.floor(Math.random() * 5);
         const correctLabel = String.fromCharCode(65 + missingIdx);
+        // Tampilkan 4 simbol yang TIDAK hilang, acak urutannya
         const display = activeChars.filter((_, i) => i !== missingIdx).sort(() => Math.random() - 0.5);
+        
         const soalCont = document.getElementById('soalCont');
         soalCont.innerHTML = display.map(s => `<span class="symbol-black">${s}</span>`).join('');
+        
         const cont = document.getElementById('pilihan');
         cont.innerHTML = '';
         ['A','B','C','D','E'].forEach(l => {
@@ -214,20 +212,22 @@
         const minK = Math.min(...terjawab);
         const maxK = Math.max(...terjawab);
         const range = maxK - minK;
-        const skorTotal = ((totalB / 500) * 100).toFixed(2);
-        const nilaiFix = (skorTotal * 0.4).toFixed(2);
+        const avgB = (totalB / 10).toFixed(1);
+
+        // Kalkulasi Skor Baru: Total Keseluruhan (Benar + Salah)
+        const skoreTotalKeseluruhan = totalB + totalS;
 
         document.getElementById('summaryBox').innerHTML = `
-            <div class="card-skor"><b>KECEPATAN (MIN)</b><div class="val-skor">${minK}</div><span class="kat-badge ${minK>=20?'bg-sukses':'bg-bahaya'}">${minK>=20?'BAIK':'KURANG'}</span></div>
+            <div class="card-skor"><b>KECEPATAN (AVG)</b><div class="val-skor">${avgB}</div><span class="kat-badge ${avgB>=20?'bg-sukses':'bg-bahaya'}">${avgB>=20?'BAIK':'KURANG'}</span></div>
             <div class="card-skor"><b>KETELITIAN (SALAH)</b><div class="val-skor">${totalS}</div><span class="kat-badge ${totalS<=5?'bg-sukses':'bg-bahaya'}">${totalS<=5?'TELITI':'REDAH'}</span></div>
-            <div class="card-skor"><b>KESTABILAN (RANGE)</b><div class="val-skor">${range}</div><span class="kat-badge ${range<=5?'bg-sukses':'bg-bahaya'}">${range<=5?'STABIL':'LABIL'}</span></div>
-            <div class="card-skor"><b>SKOR TOTAL</b><div class="val-skor">${skorTotal}</div></div>
-            <div class="card-akhir card-skor"><b>NILAI AKHIR (X0.4)</b><div class="val-skor">${nilaiFix}</div></div>
+            <div class="card-skor"><b>KESTABILAN (RANGE)</b><div class="val-skor">${range}</div><span class="kat-badge ${range<=4?'bg-sukses':'bg-bahaya'}">${range<=4?'STABIL':'LABIL'}</span></div>
+            <div class="card-skor"><b>SKORE TOTAL KESELURUHAN</b><div class="val-skor">${skoreTotalKeseluruhan}</div></div>
+            <div class="card-akhir card-skor"><b>TOTAL POIN BENAR</b><div class="val-skor">${totalB}</div></div>
         `;
 
-        let narasi = `Berdasarkan hasil simulasi, saudara ${pName} memiliki kecepatan kerja minimal ${minK} soal/menit. `;
-        narasi += totalS <= 5 ? "Tingkat ketelitian Anda sangat baik (High Precision). " : "Anda perlu melatih ketelitian karena ditemukan kesalahan di atas ambang batas. ";
-        narasi += range <= 5 ? "Grafik menunjukkan stabilitas emosi dan daya tahan stres yang sangat baik." : "Grafik fluktuatif menunjukkan adanya penurunan konsentrasi pada periode tertentu.";
+        let narasi = `Berdasarkan data simulasi, ${pName} menunjukkan kecepatan rata-rata ${avgB} soal/kolom. `;
+        narasi += totalS <= 5 ? "Tingkat ketelitian Anda masuk kategori SANGAT BAIK. " : "Anda perlu melatih fokus karena jumlah kesalahan cukup signifikan. ";
+        narasi += range <= 4 ? "Grafik menunjukkan daya tahan stres yang stabil sepanjang tes." : "Grafik yang fluktuatif mengindikasikan adanya penurunan stamina mental pada periode tertentu.";
         document.getElementById('kesimpulanNarasi').textContent = narasi;
 
         let h = '';
@@ -241,7 +241,7 @@
             type: 'line',
             data: {
                 labels: [1,2,3,4,5,6,7,8,9,10],
-                datasets: [{ label: 'Stamina', data: terjawab, borderColor: '#0b2340', tension: 0.3, fill: true, backgroundColor: 'rgba(11,35,64,0.1)' }]
+                datasets: [{ label: 'Jumlah Terjawab', data: terjawab, borderColor: '#0b2340', tension: 0.3, fill: true, backgroundColor: 'rgba(11,35,64,0.1)', borderWidth: 3 }]
             },
             options: { maintainAspectRatio: false, plugins: { legend: { display: false } } }
         });
@@ -257,7 +257,7 @@
         const w = pdf.internal.pageSize.getWidth();
         const h = (canvas.height * w) / canvas.width;
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
-        pdf.save(`Hasil_Kecermatan_${pName}.pdf`);
+        pdf.save(`Hasil_Tes_Kecermatan_${pName}.pdf`);
         btn.style.display = 'block';
     }
 </script>
