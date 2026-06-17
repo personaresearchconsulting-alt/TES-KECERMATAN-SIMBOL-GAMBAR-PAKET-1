@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
     <title>PORTAL SIMULASI - Persona Research & Consulting</title>
     <style>
         :root {
@@ -61,12 +64,8 @@
             background: var(--gold);
             transform: translateY(-2px);
         }
-        #login-section {
-            display: block;
-        }
-        #menu-section {
-            display: none;
-        }
+        #login-section { display: block; }
+        #menu-section { display: none; }
         input {
             width: 100%;
             padding: 12px;
@@ -116,28 +115,23 @@
 
     <div class="footer">
         © 2026 Persona Research & Consulting. All Rights Reserved.<br>
-        Multi-Device Protection Active (Limit: 50 Devices)
+        Multi-Device Protection Active
     </div>
 </div>
 
 <script>
     // Konfigurasi Keamanan
     const CONFIG = {
-        password: "persona02",
-        maxDevices: 50,
-        expiryDays: 7,
-        startDate: new Date("2026-04-29T10:30:00") // Dimulai saat ini
+        password: "persona05",
+        expiryDate: new Date("2026-08-01T23:59:59")
     };
 
     function checkAccess() {
         const input = document.getElementById('pass').value;
         const now = new Date();
         
-        // 1. Cek Kadaluarsa (7 Hari)
-        const diffTime = Math.abs(now - CONFIG.startDate);
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-        
-        if (diffDays > CONFIG.expiryDays) {
+        // 1. Cek Kadaluarsa
+        if (now > CONFIG.expiryDate) {
             alert("Maaf, masa berlaku link simulasi ini telah berakhir.");
             return;
         }
@@ -148,32 +142,15 @@
             return;
         }
 
-        // 3. Cek Device Limit (Fingerprint Sederhana via LocalStorage)
-        let deviceID = localStorage.getItem('prc_device_id');
-        let deviceCount = parseInt(localStorage.getItem('prc_total_devices') || "0");
-
-        if (!deviceID) {
-            if (deviceCount >= CONFIG.maxDevices) {
-                alert("Batas maksimal device (50) telah tercapai.");
-                return;
-            }
-            // Daftarkan device baru
-            deviceID = 'DEV-' + Math.random().toString(36).substr(2, 9);
-            localStorage.setItem('prc_device_id', deviceID);
-            localStorage.setItem('prc_total_devices', deviceCount + 1);
-        }
-
-        // Jika lolos semua, tampilkan menu
+        // 3. Tampilkan Menu
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('menu-section').style.display = 'block';
         
-        // Tampilkan info kadaluarsa
-        const expDate = new Date(CONFIG.startDate);
-        expDate.setDate(expDate.getDate() + CONFIG.expiryDays);
-        document.getElementById('expiry-note').innerText = "Akses berakhir pada: " + expDate.toLocaleDateString('id-ID');
+        document.getElementById('expiry-note').innerText = 
+            "Akses berlaku hingga: " + CONFIG.expiryDate.toLocaleDateString('id-ID');
     }
 
-    // Anti Copy & Right Click
+    // Anti Copy & Inspect
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.onkeydown = function(e) {
         if(e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 'I'.charCodeAt(0) || e.keyCode == 'J'.charCodeAt(0) || e.keyCode == 'C'.charCodeAt(0) || e.keyCode == 'U'.charCodeAt(0)))) {
