@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-    <title>TES KECERMATAN SILUET KENDARAAN</title>
+    <title>TES KECERMATAN SIMBOL KENDARAAN</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -157,18 +157,15 @@
             table-layout: fixed;
         }
 
-
-        .vehicle-silhouette {
+        .vehicle-icon {
             display: inline-block;
-            font-size: 42px;
+            font-size: 40px;
             line-height: 1;
-            filter: grayscale(1) contrast(200%) brightness(0);
-            -webkit-filter: grayscale(1) contrast(200%) brightness(0);
             font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
             transform: translateZ(0);
         }
-        .soal-box .vehicle-silhouette { font-size: 48px; margin: 0 4px; }
-        .acuan-table .vehicle-silhouette { font-size: 40px; }
+        .soal-box .vehicle-icon { font-size: 46px; margin: 0 4px; }
+        .acuan-table .vehicle-icon { font-size: 38px; }
 
         .acuan-table td {
             border: 2px solid var(--navy);
@@ -314,21 +311,11 @@
 
         @media (max-width: 480px) {
             .wrap { padding: 12px; margin: 0; border-radius: 0; min-height: 100vh; }
-    
-        .vehicle-silhouette {
-            display: inline-block;
-            font-size: 42px;
-            line-height: 1;
-            filter: grayscale(1) contrast(200%) brightness(0);
-            -webkit-filter: grayscale(1) contrast(200%) brightness(0);
-            font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
-            transform: translateZ(0);
-        }
-        .soal-box .vehicle-silhouette { font-size: 48px; margin: 0 4px; }
-        .acuan-table .vehicle-silhouette { font-size: 40px; }
-
-        .acuan-table td { height: 50px; font-size: 20px; }
-            .soal-box { font-size: 26px; min-height: 65px; }
+            .vehicle-icon { font-size: 36px; }
+            .soal-box .vehicle-icon { font-size: 40px; margin: 0 2px; }
+            .acuan-table .vehicle-icon { font-size: 32px; }
+            .acuan-table td { height: 50px; font-size: 20px; }
+            .soal-box { font-size: 24px; min-height: 65px; }
             .pilihan-btn { padding: 12px 0; font-size: 18px; }
         }
     </style>
@@ -337,7 +324,7 @@
 
 <div class="wrap" id="captureArea">
     <header>
-        <h1>TES KECERMATAN SILUET KENDARAAN</h1>
+        <h1>TES KECERMATAN SIMBOL KENDARAAN</h1>
         <p class="sub-header">Persona Research & Consulting</p>
     </header>
 
@@ -347,7 +334,7 @@
     </div>
 
     <div id="prepOverlay">
-        <div style="font-size:16px; margin-bottom:10px; color: #64748b; font-weight: bold;">FOKUS BENTUK SILUET BUAH-BUAHAN...</div>
+        <div style="font-size:16px; margin-bottom:10px; color: #64748b; font-weight: bold;">FOKUS SIMBOL KENDARAAN...</div>
         <div id="countdownText">3</div>
     </div>
 
@@ -368,13 +355,13 @@
     </div>
 
     <div id="resultArea">
-        <h2 style="text-align: center; font-size: 16px; margin-bottom: 5px;">LAPORAN HASIL AKHIR</h2>
+        <h2 style="text-align: center; font-size: 16px; margin-bottom: 5px;">LAPORAN HASIL AKHIR TES KECERMATAN</h2>
         <p id="resName" style="text-align:center; font-weight:900; font-size:18px; color:var(--navy); margin:0 0 10px 0; border-bottom: 2px solid var(--navy); padding-bottom:8px; text-transform: uppercase;"></p>
         
         <div id="summaryBox" class="summary-cards"></div>
 
         <div style="background:#f1f5f9; padding:12px; border-radius:8px; border:1px solid #cbd5e1; margin-bottom:12px;">
-            <b style="color:var(--navy); font-size:12px;">ANALISA HUKUM & PSIKOLOGIS POLRI:</b>
+            <b style="color:var(--navy); font-size:12px;">ANALISIS PERFORMA KECERMATAN:</b>
             <div id="kesimpulanNarasi" style="margin-top:6px; line-height:1.4; font-size:11px; color:#334155;"></div>
         </div>
 
@@ -392,7 +379,7 @@
         </table>
         
         <div style="margin-top:15px; height: 180px; border:1px solid #e2e8f0; padding:8px; border-radius:8px;">
-            <canvas id="chartPauli"></canvas>
+            <canvas id="chartKecermatan"></canvas>
         </div>
         
         <button id="btnRekapAkhir" style="background:#0b2340; color:#fff; border:none; padding:14px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; width:100%; font-size:14px; display:none;" onclick="window.location.href='REKAP_NILAI_AKHIR.html'">📊 LIHAT REKAP NILAI AKHIR</button>
@@ -401,25 +388,22 @@
 </div>
 
 <script>
-    // BANK SILUET BUAH-BUAHAN - menggunakan bentuk kendaraan yang jelas dan dapat tampil langsung di browser
-    // Emoji dibuat menjadi siluet hitam melalui CSS sehingga tidak membutuhkan file gambar eksternal.
     const VEHICLE_BANK = [
-        ['🚗','🚌','🚚','🏍️','🚲'],
-        ['🚆','🚜','🚐','🚙','🛻'],
-        ['✈️','🚁','🛩️','🚀','🛸'],
-        ['🚢','⛵','🛶','🚤','🛳️'],
-        ['🚗','🚚','🚌','🚲','🏍️'],
-        ['🚆','🚜','🚐','🛻','🚙'],
-        ['✈️','🚁','🚀','🛩️','🛸'],
-        ['🚢','🚤','⛵','🛶','🛳️'],
-        ['🚗','🚆','✈️','🚢','🏍️'],
-        ['🚌','🚚','🚁','🚤','🚲']
+        ['🚗','🚲','🛵','🚌','✈️'],
+        ['⛵','🚁','🚜','🏎️','🚀'],
+        ['🚑','🚓','🚒','🚚','🛺'],
+        ['🚗','🛵','⛵','🚜','🚓'],
+        ['🚲','🚌','🚁','🏎️','🚒'],
+        ['✈️','🚀','🚑','🚚','🛺'],
+        ['🛵','⛵','🚗','🏎️','🚑'],
+        ['🚲','🚜','🚌','🚀','🚓'],
+        ['🚚','🛺','🚁','🚒','✈️'],
+        ['🚗','🛵','🚀','🚑','🚜']
     ];
 
-    function vehicleSilhouette(vehicle) {
-        return `<span class="vehicle-silhouette" aria-label="siluet kendaraan">${vehicle}</span>`;
+    function renderVehicle(icon) {
+        return `<span class="vehicle-icon" aria-label="simbol kendaraan">${icon}</span>`;
     }
-
 
     let currentIdx = 0, timerLeft = 60, interval = null, results = [], pName = "", activeChars = [];
 
@@ -454,7 +438,7 @@
         
         let hSimbol = ''; let hLabel = '';
         activeChars.forEach((c, i) => {
-            hSimbol += `<td>${vehicleSilhouette(c)}</td>`;
+            hSimbol += `<td>${renderVehicle(c)}</td>`;
             hLabel += `<td class="label">${String.fromCharCode(65+i)}</td>`;
         });
         document.getElementById('rowSimbol').innerHTML = hSimbol;
@@ -478,7 +462,7 @@
         const correctLabel = String.fromCharCode(65 + missingIdx);
         const display = activeChars.filter((_, i) => i !== missingIdx).sort(() => Math.random() - 0.5);
         const soalCont = document.getElementById('soalCont');
-        soalCont.innerHTML = display.map(vehicleSilhouette).join(' ');
+        soalCont.innerHTML = display.map(renderVehicle).join(' ');
         
         const cont = document.getElementById('pilihan');
         cont.innerHTML = '';
@@ -509,8 +493,6 @@
         const range = maxK - minK;
         const avgK = terjawab.reduce((a, b) => a + b, 0) / 10;
 
-        // --- NORMA PENGUKURAN PRESISI POLRI (MAX SCORE = 40.00) ---
-        
         // 1. KECEPATAN (MAX 13.33)
         let skorKecepatan = 0;
         let katKecepatan = '';
@@ -562,17 +544,18 @@
             katKestabilan = 'KURANG';
         }
 
-        // TOTAL AKUMULASI NILAI AKHIR POLRI
-        const nilaiAkhir = (skorKecepatan + skorKetelitian + skorKestabilan).toFixed(2);
+        // PERHITUNGAN NILAI KESELURUHAN & NILAI AKHIR (KESELURUHAN × 0,4)
+        const nilaiKeseluruhan = skorKecepatan + skorKetelitian + skorKestabilan;
+        const nilaiAkhir = (nilaiKeseluruhan * 0.4).toFixed(2);
 
         // INTEGRASI SISTEM TRYOUT PERSONA RESEARCH & CONSULTING
-        // Nilai asli tes kecermatan maksimal 40, kemudian dinormalisasi ke skala 0-100
-        const nilaiKecermatan100 = Math.max(0, Math.min(100, (parseFloat(nilaiAkhir) / 40) * 100));
+        const nilaiKecermatan100 = Math.max(0, Math.min(100, (parseFloat(nilaiAkhir) / 16) * 100));
         localStorage.setItem('prc_nilai_kecermatan', nilaiKecermatan100.toFixed(2));
         localStorage.setItem('prc_nama_peserta', pName);
         localStorage.setItem('prc_status_kecermatan', 'selesai');
         localStorage.setItem('prc_detail_kecermatan', JSON.stringify({
             nama: pName,
+            nilaiKeseluruhan: nilaiKeseluruhan.toFixed(2),
             nilaiAsli: parseFloat(nilaiAkhir),
             nilaiSkala100: nilaiKecermatan100,
             totalBenar: totalB,
@@ -602,16 +585,16 @@
                 <span class="kat-badge ${katKestabilan==='SANGAT BAIK'||katKestabilan==='BAIK'?'bg-sukses':'bg-bahaya'}">${katKestabilan}</span>
             </div>
             <div class="card-skor">
-                <b>TOTAL BENAR</b>
-                <div class="val-skor">${totalB}</div>
+                <b>NILAI KESELURUHAN</b>
+                <div class="val-skor">${nilaiKeseluruhan.toFixed(2)}</div>
             </div>
             <div class="card-akhir card-skor">
-                <b>NILAI AKHIR (MAX 40)</b>
+                <b>NILAI AKHIR (KESELURUHAN × 0,4)</b>
                 <div class="val-skor">${nilaiAkhir}</div>
             </div>
         `;
 
-        let narasi = `Hasil pemeriksaan psikologis tes kecermatan menunjukkan Saudara ${pName} memiliki rata-rata kecepatan pengerjaan ${avgK.toFixed(1)} soal/menit (${katKecepatan}). `;
+        let narasi = `Hasil tes kecermatan menunjukkan Saudara ${pName} memiliki rata-rata kecepatan pengerjaan ${avgK.toFixed(1)} soal/menit (${katKecepatan}). `;
         narasi += `Ketelitian berada pada kategori ${katKetelitian} dengan total kesalahan ${totalS}. `;
         narasi += `Tingkat kestabilan kerja tergolong ${katKestabilan} dengan selisih rentang (max-min) sebesar ${range}.`;
         document.getElementById('kesimpulanNarasi').textContent = narasi;
@@ -623,7 +606,8 @@
         });
         document.getElementById('tbodyHasil').innerHTML = h;
 
-        new Chart(document.getElementById('chartPauli'), {
+        // CHART PERFORMA KECERMATAN
+        new Chart(document.getElementById('chartKecermatan'), {
             type: 'line',
             data: {
                 labels: [1,2,3,4,5,6,7,8,9,10],
@@ -654,7 +638,7 @@
         const w = pdf.internal.pageSize.getWidth();
         const h = (canvas.height * w) / canvas.width;
         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, w, h);
-        pdf.save(`Hasil_Kecermatan_POLRI_${pName}.pdf`);
+        pdf.save(`Hasil_Kecermatan_Kendaraan_${pName}.pdf`);
         btn.style.display = 'block';
     }
 </script>
